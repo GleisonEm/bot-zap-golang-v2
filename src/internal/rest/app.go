@@ -2,8 +2,8 @@ package rest
 
 import (
 	"fmt"
-	domainApp "github.com/aldinokemal/go-whatsapp-web-multidevice/domains/app"
-	"github.com/aldinokemal/go-whatsapp-web-multidevice/pkg/utils"
+	domainApp "github.com/gleisonem/bot-zap-golang-v2/domains/app"
+	"github.com/gleisonem/bot-zap-golang-v2/pkg/utils"
 	"github.com/gofiber/fiber/v2"
 )
 

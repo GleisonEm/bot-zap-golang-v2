@@ -1,9 +1,9 @@
 package rest
 
 import (
-	domainSend "github.com/aldinokemal/go-whatsapp-web-multidevice/domains/send"
-	"github.com/aldinokemal/go-whatsapp-web-multidevice/pkg/utils"
-	"github.com/aldinokemal/go-whatsapp-web-multidevice/pkg/whatsapp"
+	domainSend "github.com/gleisonem/bot-zap-golang-v2/domains/send"
+	"github.com/gleisonem/bot-zap-golang-v2/pkg/utils"
+	"github.com/gleisonem/bot-zap-golang-v2/pkg/whatsapp"
 	"github.com/gofiber/fiber/v2"
 )
 

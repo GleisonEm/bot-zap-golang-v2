@@ -2,17 +2,17 @@
 
 ![release version](https://img.shields.io/github/v/release/aldinokemal/go-whatsapp-web-multidevice)
 <br>
-![Build Image](https://github.com/aldinokemal/go-whatsapp-web-multidevice/actions/workflows/build-docker-image.yaml/badge.svg)
+![Build Image](https://github.com/gleisonem/bot-zap-golang-v2/actions/workflows/build-docker-image.yaml/badge.svg)
 <br>
-![release windows](https://github.com/aldinokemal/go-whatsapp-web-multidevice/actions/workflows/release-windows.yml/badge.svg)
-![release linux](https://github.com/aldinokemal/go-whatsapp-web-multidevice/actions/workflows/release-linux.yml/badge.svg)
-![release macos](https://github.com/aldinokemal/go-whatsapp-web-multidevice/actions/workflows/release-mac.yml/badge.svg)
+![release windows](https://github.com/gleisonem/bot-zap-golang-v2/actions/workflows/release-windows.yml/badge.svg)
+![release linux](https://github.com/gleisonem/bot-zap-golang-v2/actions/workflows/release-linux.yml/badge.svg)
+![release macos](https://github.com/gleisonem/bot-zap-golang-v2/actions/workflows/release-mac.yml/badge.svg)
 
 ### Support `ARM` Architecture
 
 Now that we support ARM64 for Linux:
 
-- [Release](https://github.com/aldinokemal/go-whatsapp-web-multidevice/releases/latest) for ARM64
+- [Release](https://github.com/gleisonem/bot-zap-golang-v2/releases/latest) for ARM64
 - [Docker Image](https://hub.docker.com/r/aldinokemal2104/go-whatsapp-web-multidevice/tags) for ARM64.
 
 ### Feature
@@ -51,7 +51,7 @@ Now that we support ARM64 for Linux:
 
 #### Basic
 
-1. Clone this repo: `git clone https://github.com/aldinokemal/go-whatsapp-web-multidevice`
+1. Clone this repo: `git clone https://github.com/gleisonem/bot-zap-golang-v2`
 2. Open the folder that was cloned via cmd/terminal.
 3. run `cd src`
 4. run `go run main.go`
@@ -59,14 +59,14 @@ Now that we support ARM64 for Linux:
 
 #### Docker (you don't need to install in required)
 
-1. Clone this repo: `git clone https://github.com/aldinokemal/go-whatsapp-web-multidevice`
+1. Clone this repo: `git clone https://github.com/gleisonem/bot-zap-golang-v2`
 2. Open the folder that was cloned via cmd/terminal.
 3. run `docker-compose up -d --build`
 4. open `http://localhost:3000`
 
 #### Build your own binary
 
-1. Clone this repo `git clone https://github.com/aldinokemal/go-whatsapp-web-multidevice`
+1. Clone this repo `git clone https://github.com/gleisonem/bot-zap-golang-v2`
 2. Open the folder that was cloned via cmd/terminal.
 3. run `cd src`
 4. run
@@ -87,7 +87,7 @@ docker run --detach --publish=3000:3000 --name=whatsapp --restart=always --volum
 
 ### Production Mode (binary)
 
-- download binary from [release](https://github.com/aldinokemal/go-whatsapp-web-multidevice/releases)
+- download binary from [release](https://github.com/gleisonem/bot-zap-golang-v2/releases)
 
 You can fork or edit this source code !
 
@@ -98,22 +98,22 @@ You can fork or edit this source code !
   to [SwaggerEditor](https://editor.swagger.io).
 - Furthermore you can generate HTTP Client from this API using [openapi-generator](https://openapi-generator.tech/#try)
 
-| Feature | Menu                         | Method | URL                           | 
+| Feature | Menu                         | Method | URL                           |
 |---------|------------------------------|--------|-------------------------------|
 | ✅       | Login with Scan QR           | GET    | /app/login                    |
 | ✅       | Login With Pair Code         | GET    | /app/login-with-code          |
-| ✅       | Logout                       | GET    | /app/logout                   |  
-| ✅       | Reconnect                    | GET    | /app/reconnect                | 
-| ✅       | Devices                      | GET    | /app/devices                  | 
+| ✅       | Logout                       | GET    | /app/logout                   |
+| ✅       | Reconnect                    | GET    | /app/reconnect                |
+| ✅       | Devices                      | GET    | /app/devices                  |
 | ✅       | User Info                    | GET    | /user/info                    |
 | ✅       | User Avatar                  | GET    | /user/avatar                  |
 | ✅       | User My Group List           | GET    | /user/my/groups               |
 | ✅       | User My Privacy Setting      | GET    | /user/my/privacy              |
 | ✅       | Send Message                 | POST   | /send/message                 |
-| ✅       | Send Image                   | POST   | /send/image                   | 
-| ✅       | Send Audio                   | POST   | /send/audio                   | 
-| ✅       | Send File                    | POST   | /send/file                    | 
-| ✅       | Send Video                   | POST   | /send/video                   | 
+| ✅       | Send Image                   | POST   | /send/image                   |
+| ✅       | Send Audio                   | POST   | /send/audio                   |
+| ✅       | Send File                    | POST   | /send/file                    |
+| ✅       | Send Video                   | POST   | /send/video                   |
 | ✅       | Send Contact                 | POST   | /send/contact                 |
 | ✅       | Send Link                    | POST   | /send/link                    |
 | ✅       | Send Location                | POST   | /send/location                |

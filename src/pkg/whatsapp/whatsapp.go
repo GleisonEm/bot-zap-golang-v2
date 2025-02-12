@@ -2,12 +2,20 @@ package whatsapp
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/aldinokemal/go-whatsapp-web-multidevice/config"
-	"github.com/aldinokemal/go-whatsapp-web-multidevice/internal/websocket"
-	pkgError "github.com/aldinokemal/go-whatsapp-web-multidevice/pkg/error"
+	"mime"
+	"net/http"
+	"os"
+	"regexp"
+	"strings"
+	"sync/atomic"
+	"time"
+
+	"github.com/gleisonem/bot-zap-golang-v2/config"
+	eventsWebhook "github.com/gleisonem/bot-zap-golang-v2/events"
+	"github.com/gleisonem/bot-zap-golang-v2/internal/websocket"
+	pkgError "github.com/gleisonem/bot-zap-golang-v2/pkg/error"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"go.mau.fi/whatsmeow"
@@ -18,14 +26,6 @@ import (
 	"go.mau.fi/whatsmeow/types"
 	"go.mau.fi/whatsmeow/types/events"
 	waLog "go.mau.fi/whatsmeow/util/log"
-	"google.golang.org/protobuf/proto"
-	"mime"
-	"net/http"
-	"os"
-	"regexp"
-	"strings"
-	"sync/atomic"
-	"time"
 )
 
 var (
@@ -186,12 +186,12 @@ func MustLogin(waCli *whatsmeow.Client) {
 	}
 }
 
-func handler(rawEvt interface{}) {
-	switch evt := rawEvt.(type) {
+func handler(evt interface{}) {
+	switch event := evt.(type) {
 	case *events.DeleteForMe:
-		log.Infof("Deleted message %s for %s", evt.MessageID, evt.SenderJID.String())
+		log.Infof("Deleted message %s for %s", event.MessageID, event.SenderJID.String())
 	case *events.AppStateSyncComplete:
-		if len(cli.Store.PushName) > 0 && evt.Name == appstate.WAPatchCriticalBlock {
+		if len(cli.Store.PushName) > 0 && event.Name == appstate.WAPatchCriticalBlock {
 			err := cli.SendPresence(types.PresenceAvailable)
 			if err != nil {
 				log.Warnf("Failed to send available presence: %v", err)
@@ -202,7 +202,7 @@ func handler(rawEvt interface{}) {
 	case *events.PairSuccess:
 		websocket.Broadcast <- websocket.BroadcastMessage{
 			Code:    "LOGIN_SUCCESS",
-			Message: fmt.Sprintf("Successfully pair with %s", evt.ID.String()),
+			Message: fmt.Sprintf("Successfully pair with %s", event.ID.String()),
 		}
 	case *events.LoggedOut:
 		websocket.Broadcast <- websocket.BroadcastMessage{
@@ -225,61 +225,62 @@ func handler(rawEvt interface{}) {
 	case *events.StreamReplaced:
 		os.Exit(0)
 	case *events.Message:
-		metaParts := []string{fmt.Sprintf("pushname: %s", evt.Info.PushName), fmt.Sprintf("timestamp: %s", evt.Info.Timestamp)}
-		if evt.Info.Type != "" {
-			metaParts = append(metaParts, fmt.Sprintf("type: %s", evt.Info.Type))
-		}
-		if evt.Info.Category != "" {
-			metaParts = append(metaParts, fmt.Sprintf("category: %s", evt.Info.Category))
-		}
-		if evt.IsViewOnce {
-			metaParts = append(metaParts, "view once")
-		}
+		eventsWebhook.OnMessage(event)
+		// metaParts := []string{fmt.Sprintf("pushname: %s", event.Info.PushName), fmt.Sprintf("timestamp: %s", event.Info.Timestamp)}
+		// if event.Info.Type != "" {
+		// 	metaParts = append(metaParts, fmt.Sprintf("type: %s", event.Info.Type))
+		// }
+		// if event.Info.Category != "" {
+		// 	metaParts = append(metaParts, fmt.Sprintf("category: %s", event.Info.Category))
+		// }
+		// if event.IsViewOnce {
+		// 	metaParts = append(metaParts, "view once")
+		// }
 
-		log.Infof("Received message %s from %s (%s): %+v", evt.Info.ID, evt.Info.SourceString(), strings.Join(metaParts, ", "), evt.Message)
+		// log.Infof("Received message %s from %s (%s): %+v", event.Info.ID, event.Info.SourceString(), strings.Join(metaParts, ", "), event.Message)
 
-		img := evt.Message.GetImageMessage()
-		if img != nil {
-			path, err := ExtractMedia(config.PathStorages, img)
-			if err != nil {
-				log.Errorf("Failed to download image: %v", err)
-			} else {
-				log.Infof("Image downloaded to %s", path)
-			}
-		}
+		// img := event.Message.GetImageMessage()
+		// if img != nil {
+		// 	path, err := ExtractMedia(config.PathStorages, img)
+		// 	if err != nil {
+		// 		log.Errorf("Failed to download image: %v", err)
+		// 	} else {
+		// 		log.Infof("Image downloaded to %s", path)
+		// 	}
+		// }
 
-		if config.WhatsappAutoReplyMessage != "" &&
-			!isGroupJid(evt.Info.Chat.String()) &&
-			!strings.Contains(evt.Info.SourceString(), "broadcast") {
-			_, _ = cli.SendMessage(context.Background(), evt.Info.Sender, &waE2E.Message{Conversation: proto.String(config.WhatsappAutoReplyMessage)})
-		}
+		// if config.WhatsappAutoReplyMessage != "" &&
+		// 	!isGroupJid(event.Info.Chat.String()) &&
+		// 	!strings.Contains(event.Info.SourceString(), "broadcast") {
+		// 	_, _ = cli.SendMessage(context.Background(), event.Info.Sender, &waE2E.Message{Conversation: proto.String(config.WhatsappAutoReplyMessage)})
+		// }
 
-		if config.WhatsappWebhook != "" &&
-			!strings.Contains(evt.Info.SourceString(), "broadcast") &&
-			!isFromMySelf(evt.Info.SourceString()) {
-			if err := forwardToWebhook(evt); err != nil {
-				logrus.Error("Failed forward to webhook", err)
-			}
-		}
+		// if config.WhatsappWebhook != "" &&
+		// 	!strings.Contains(event.Info.SourceString(), "broadcast") &&
+		// 	!isFromMySelf(event.Info.SourceString()) {
+		// 	if err := forwardToWebhook(event); err != nil {
+		// 		logrus.Error("Failed forward to webhook", err)
+		// 	}
+		// }
 	case *events.Receipt:
-		if evt.Type == types.ReceiptTypeRead || evt.Type == types.ReceiptTypeReadSelf {
-			log.Infof("%v was read by %s at %s", evt.MessageIDs, evt.SourceString(), evt.Timestamp)
-		} else if evt.Type == types.ReceiptTypeDelivered {
-			log.Infof("%s was delivered to %s at %s", evt.MessageIDs[0], evt.SourceString(), evt.Timestamp)
+		if event.Type == types.ReceiptTypeRead || event.Type == types.ReceiptTypeReadSelf {
+			log.Infof("%v was read by %s at %s", event.MessageIDs, event.SourceString(), event.Timestamp)
+		} else if event.Type == types.ReceiptTypeDelivered {
+			log.Infof("%s was delivered to %s at %s", event.MessageIDs[0], event.SourceString(), event.Timestamp)
 		}
 	case *events.Presence:
-		if evt.Unavailable {
-			if evt.LastSeen.IsZero() {
-				log.Infof("%s is now offline", evt.From)
+		if event.Unavailable {
+			if event.LastSeen.IsZero() {
+				log.Infof("%s is now offline", event.From)
 			} else {
-				log.Infof("%s is now offline (last seen: %s)", evt.From, evt.LastSeen)
+				log.Infof("%s is now offline (last seen: %s)", event.From, event.LastSeen)
 			}
 		} else {
-			log.Infof("%s is now online", evt.From)
+			log.Infof("%s is now online", event.From)
 		}
 	case *events.HistorySync:
 		id := atomic.AddInt32(&historySyncID, 1)
-		fileName := fmt.Sprintf("%s/history-%d-%s-%d-%s.json", config.PathStorages, startupTime, cli.Store.ID.String(), id, evt.Data.SyncType.String())
+		fileName := fmt.Sprintf("%s/history-%d-%s-%d-%s.json", config.PathStorages, startupTime, cli.Store.ID.String(), id, event.Data.SyncType.String())
 		file, err := os.OpenFile(fileName, os.O_WRONLY|os.O_CREATE, 0600)
 		if err != nil {
 			log.Errorf("Failed to open file to write history sync: %v", err)
@@ -287,7 +288,7 @@ func handler(rawEvt interface{}) {
 		}
 		enc := json.NewEncoder(file)
 		enc.SetIndent("", "  ")
-		err = enc.Encode(evt.Data)
+		err = enc.Encode(event.Data)
 		if err != nil {
 			log.Errorf("Failed to write history sync: %v", err)
 			return
@@ -295,8 +296,11 @@ func handler(rawEvt interface{}) {
 		log.Infof("Wrote history sync to %s", fileName)
 		_ = file.Close()
 	case *events.AppState:
-		log.Debugf("App state event: %+v / %+v", evt.Index, evt.SyncActionValue)
+		log.Debugf("App state event: %+v / %+v", event.Index, event.SyncActionValue)
+	default:
+		fmt.Println("Unknown event type", event)
 	}
+
 }
 
 // forwardToWebhook is a helper function to forward event to webhook url

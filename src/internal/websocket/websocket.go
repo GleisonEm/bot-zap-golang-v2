@@ -3,7 +3,7 @@ package websocket
 import (
 	"context"
 	"encoding/json"
-	domainApp "github.com/aldinokemal/go-whatsapp-web-multidevice/domains/app"
+	domainApp "github.com/gleisonem/bot-zap-golang-v2/domains/app"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/websocket/v2"
 	"log"

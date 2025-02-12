@@ -2,15 +2,62 @@ package utils
 
 import (
 	"fmt"
-	"github.com/PuerkitoBio/goquery"
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
+	"unicode"
+
+	"github.com/PuerkitoBio/goquery"
+	"golang.org/x/text/unicode/norm"
 )
+
+func ConvertOgaToWav(inputFile, outputFile string) error {
+	cmd := exec.Command("ffmpeg", "-i", inputFile, "-acodec", "pcm_s16le", "-ac", "1", "-ar", "16000", outputFile)
+	err := cmd.Run()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func RemoveAccents(input string) string {
+	// Normalizar a string para decompor os acentos
+	t := norm.NFD.String(input)
+
+	// Filtrar os caracteres para remover acentos
+	out := make([]rune, 0, len(t))
+	for _, r := range t {
+		// Somente adicionar os caracteres que não são diacríticos (acentos)
+		if !unicode.Is(unicode.Mn, r) {
+			out = append(out, r)
+		}
+	}
+
+	return string(out)
+}
+
+func GetArgument(msg string) string {
+	parts := strings.Split(msg, " ")
+	if len(parts) > 1 {
+		return parts[1]
+	}
+
+	return ""
+}
+
+func ProcessCommand(msg string) string {
+	parts := strings.Split(msg, " ")
+	command := parts[0]
+	command = strings.ToLower(command)
+	command = RemoveAccents(command)
+
+	return command
+}
 
 // RemoveFile is removing file with delay
 func RemoveFile(delaySecond int, paths ...string) error {

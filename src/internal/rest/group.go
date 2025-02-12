@@ -2,9 +2,9 @@ package rest
 
 import (
 	"fmt"
-	domainGroup "github.com/aldinokemal/go-whatsapp-web-multidevice/domains/group"
-	"github.com/aldinokemal/go-whatsapp-web-multidevice/pkg/utils"
-	"github.com/aldinokemal/go-whatsapp-web-multidevice/pkg/whatsapp"
+	domainGroup "github.com/gleisonem/bot-zap-golang-v2/domains/group"
+	"github.com/gleisonem/bot-zap-golang-v2/pkg/utils"
+	"github.com/gleisonem/bot-zap-golang-v2/pkg/whatsapp"
 	"github.com/gofiber/fiber/v2"
 	"go.mau.fi/whatsmeow"
 )

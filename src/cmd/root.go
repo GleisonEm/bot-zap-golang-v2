@@ -3,15 +3,22 @@ package cmd
 import (
 	"embed"
 	"fmt"
-	"github.com/aldinokemal/go-whatsapp-web-multidevice/config"
-	"github.com/aldinokemal/go-whatsapp-web-multidevice/internal/rest"
-	"github.com/aldinokemal/go-whatsapp-web-multidevice/internal/rest/helpers"
-	"github.com/aldinokemal/go-whatsapp-web-multidevice/internal/rest/middleware"
-	"github.com/aldinokemal/go-whatsapp-web-multidevice/internal/websocket"
-	"github.com/aldinokemal/go-whatsapp-web-multidevice/pkg/utils"
-	"github.com/aldinokemal/go-whatsapp-web-multidevice/pkg/whatsapp"
-	"github.com/aldinokemal/go-whatsapp-web-multidevice/services"
+	"log"
+	"net/http"
+	"os"
+	"strings"
+
 	"github.com/dustin/go-humanize"
+	"github.com/gleisonem/bot-zap-golang-v2/config"
+	"github.com/gleisonem/bot-zap-golang-v2/contexts"
+	"github.com/gleisonem/bot-zap-golang-v2/internal/bot"
+	"github.com/gleisonem/bot-zap-golang-v2/internal/rest"
+	"github.com/gleisonem/bot-zap-golang-v2/internal/rest/helpers"
+	"github.com/gleisonem/bot-zap-golang-v2/internal/rest/middleware"
+	"github.com/gleisonem/bot-zap-golang-v2/internal/websocket"
+	"github.com/gleisonem/bot-zap-golang-v2/pkg/utils"
+	"github.com/gleisonem/bot-zap-golang-v2/pkg/whatsapp"
+	"github.com/gleisonem/bot-zap-golang-v2/services"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -20,10 +27,6 @@ import (
 	"github.com/gofiber/template/html/v2"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/spf13/cobra"
-	"log"
-	"net/http"
-	"os"
-	"strings"
 )
 
 var (
@@ -34,7 +37,7 @@ var (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Short: "Send free whatsapp API",
-	Long: `This application is from clone https://github.com/aldinokemal/go-whatsapp-web-multidevice, 
+	Long: `This application is from clone https://github.com/gleisonem/bot-zap-golang-v2,
 you can send whatsapp over http api but your whatsapp account have to be multi device version`,
 	Run: runRest,
 }
@@ -111,6 +114,12 @@ func runRest(_ *cobra.Command, _ []string) {
 	userService := services.NewUserService(cli)
 	messageService := services.NewMessageService(cli)
 	groupService := services.NewGroupService(cli)
+
+	appServiceBot := bot.NewAppService(cli, db)
+	sendServiceBot := bot.NewSendService(cli, appServiceBot)
+	messageServiceBot := bot.NewMessageService(cli)
+	groupServiceBot := bot.NewGroupService(cli)
+	contexts.InitServiceAppContext(appServiceBot, sendServiceBot, messageServiceBot, groupServiceBot)
 
 	// Rest
 	rest.InitRestApp(app, appService)

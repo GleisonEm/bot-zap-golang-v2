@@ -2,8 +2,8 @@ package middleware
 
 import (
 	"fmt"
-	pkgError "github.com/aldinokemal/go-whatsapp-web-multidevice/pkg/error"
-	"github.com/aldinokemal/go-whatsapp-web-multidevice/pkg/utils"
+	pkgError "github.com/gleisonem/bot-zap-golang-v2/pkg/error"
+	"github.com/gleisonem/bot-zap-golang-v2/pkg/utils"
 	"github.com/gofiber/fiber/v2"
 )
 

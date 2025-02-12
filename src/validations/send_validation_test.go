@@ -2,9 +2,9 @@ package validations
 
 import (
 	"context"
-	domainMessage "github.com/aldinokemal/go-whatsapp-web-multidevice/domains/message"
-	domainSend "github.com/aldinokemal/go-whatsapp-web-multidevice/domains/send"
-	pkgError "github.com/aldinokemal/go-whatsapp-web-multidevice/pkg/error"
+	domainMessage "github.com/gleisonem/bot-zap-golang-v2/domains/message"
+	domainSend "github.com/gleisonem/bot-zap-golang-v2/domains/send"
+	pkgError "github.com/gleisonem/bot-zap-golang-v2/pkg/error"
 	"github.com/stretchr/testify/assert"
 	"mime/multipart"
 	"testing"

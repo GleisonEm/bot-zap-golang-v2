@@ -3,10 +3,10 @@ package validations
 import (
 	"context"
 	"fmt"
-	"github.com/aldinokemal/go-whatsapp-web-multidevice/config"
-	domainSend "github.com/aldinokemal/go-whatsapp-web-multidevice/domains/send"
-	pkgError "github.com/aldinokemal/go-whatsapp-web-multidevice/pkg/error"
 	"github.com/dustin/go-humanize"
+	"github.com/gleisonem/bot-zap-golang-v2/config"
+	domainSend "github.com/gleisonem/bot-zap-golang-v2/domains/send"
+	pkgError "github.com/gleisonem/bot-zap-golang-v2/pkg/error"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"github.com/go-ozzo/ozzo-validation/v4/is"
 )

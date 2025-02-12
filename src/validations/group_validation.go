@@ -2,8 +2,8 @@ package validations
 
 import (
 	"context"
-	domainGroup "github.com/aldinokemal/go-whatsapp-web-multidevice/domains/group"
-	pkgError "github.com/aldinokemal/go-whatsapp-web-multidevice/pkg/error"
+	domainGroup "github.com/gleisonem/bot-zap-golang-v2/domains/group"
+	pkgError "github.com/gleisonem/bot-zap-golang-v2/pkg/error"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 

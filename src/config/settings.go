@@ -21,6 +21,7 @@ var (
 
 	WhatsappAutoReplyMessage    string
 	WhatsappWebhook             string = "https://gleisin1208.app.n8n.cloud/webhook-test/teste"
+	WhatsappWebhookSecundary    string = "https://gleisin1208.app.n8n.cloud/webhook/teste"
 	WhatsappLogLevel                   = "ERROR"
 	WhatsappSettingMaxFileSize  int64  = 50000000  // 50MB
 	WhatsappSettingMaxVideoSize int64  = 100000000 // 100MB

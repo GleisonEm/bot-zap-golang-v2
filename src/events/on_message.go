@@ -4,13 +4,14 @@ import (
 	"context"
 	"fmt"
 
+	"strings"
+
 	"github.com/gleisonem/bot-zap-golang-v2/config"
 	ServiceAppContext "github.com/gleisonem/bot-zap-golang-v2/contexts"
 	domainBotTypes "github.com/gleisonem/bot-zap-golang-v2/domains/bot/types"
 	"github.com/gleisonem/bot-zap-golang-v2/pkg/utils"
 	"github.com/gofiber/fiber/v2/log"
 	"go.mau.fi/whatsmeow/types/events"
-	"strings"
 )
 
 type ExtractedMedia struct {
@@ -40,9 +41,9 @@ func OnMessage(evt *events.Message) {
 	// }
 	// fmt.Println("Received message ", string(evt.Info.ID), evt.Info.SourceString(), "is group:", evt.Info.IsGroup, evt.Message)
 
-	downloadMedia := false 
+	downloadMedia := false
 
-	if downloadMedia {	
+	if downloadMedia {
 		img := evt.Message.GetImageMessage()
 		if img != nil {
 			path, err := ServiceAppContext.Context.MessageService.ExtractMedia(context.Background(), config.PathStorages, img)

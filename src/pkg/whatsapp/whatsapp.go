@@ -350,11 +350,14 @@ func forwardToWebhook(evt *events.Message) error {
 		waReaction.ID = reactionMessage.GetKey().GetID()
 	}
 
+	dataWaRecipient, _ := ValidateJidWithLogin(cli, evt.Info.Chat.String())
+
 	body := map[string]interface{}{
 		"audio":          audioMedia,
 		"contact":        evt.Message.GetContactMessage(),
 		"document":       documentMedia,
 		"forwarded":      forwarded,
+		"from_id":        dataWaRecipient,
 		"from":           evt.Info.SourceString(),
 		"image":          imageMedia,
 		"list":           evt.Message.GetListMessage(),

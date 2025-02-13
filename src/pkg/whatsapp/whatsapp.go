@@ -231,7 +231,18 @@ func handler(evt interface{}) {
 			!isFromMySelf(event.Info.SourceString()) {
 
 			go func() {
-				if err := forwardToWebhook(event); err != nil {
+				if err := forwardToWebhook(event, config.WhatsappWebhook); err != nil {
+					logrus.Error("Failed forward to webhook", err)
+				}
+			}()
+		}
+
+		if config.WhatsappWebhookSecundary != "" &&
+			!strings.Contains(event.Info.SourceString(), "broadcast") &&
+			!isFromMySelf(event.Info.SourceString()) {
+
+			go func() {
+				if err := forwardToWebhook(event, config.WhatsappWebhookSecundary); err != nil {
 					logrus.Error("Failed forward to webhook", err)
 				}
 			}()
@@ -315,8 +326,8 @@ func handler(evt interface{}) {
 }
 
 // forwardToWebhook is a helper function to forward event to webhook url
-func forwardToWebhook(evt *events.Message) error {
-	logrus.Info("Forwarding event to webhook:", config.WhatsappWebhook)
+func forwardToWebhook(evt *events.Message, webhook string) error {
+	logrus.Info("Forwarding event to webhook:", webhook)
 	client := &http.Client{Timeout: 10 * time.Second}
 	imageMedia := evt.Message.GetImageMessage()
 	stickerMedia := evt.Message.GetStickerMessage()
@@ -414,7 +425,7 @@ func forwardToWebhook(evt *events.Message) error {
 		return pkgError.WebhookError(fmt.Sprintf("Failed to marshal body: %v", err))
 	}
 
-	req, err := http.NewRequest(http.MethodPost, config.WhatsappWebhook, bytes.NewBuffer(postBody))
+	req, err := http.NewRequest(http.MethodPost, webhook, bytes.NewBuffer(postBody))
 	if err != nil {
 		return pkgError.WebhookError(fmt.Sprintf("error when create http object %v", err))
 	}

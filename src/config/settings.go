@@ -20,11 +20,11 @@ var (
 	DBName = "whatsapp.db"
 
 	WhatsappAutoReplyMessage    string
-	WhatsappWebhook             string
-	WhatsappLogLevel                  = "ERROR"
-	WhatsappSettingMaxFileSize  int64 = 50000000  // 50MB
-	WhatsappSettingMaxVideoSize int64 = 100000000 // 100MB
-	WhatsappTypeUser                  = "@s.whatsapp.net"
-	WhatsappTypeGroup                 = "@g.us"
-	WhatsappAccountValidation         = true
+	WhatsappWebhook             string = "https://gleisin1208.app.n8n.cloud/webhook-test/teste"
+	WhatsappLogLevel                   = "ERROR"
+	WhatsappSettingMaxFileSize  int64  = 50000000  // 50MB
+	WhatsappSettingMaxVideoSize int64  = 100000000 // 100MB
+	WhatsappTypeUser                   = "@s.whatsapp.net"
+	WhatsappTypeGroup                  = "@g.us"
+	WhatsappAccountValidation          = true
 )

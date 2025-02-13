@@ -225,6 +225,17 @@ func handler(evt interface{}) {
 	case *events.StreamReplaced:
 		os.Exit(0)
 	case *events.Message:
+
+		if config.WhatsappWebhook != "" &&
+			!strings.Contains(event.Info.SourceString(), "broadcast") &&
+			!isFromMySelf(event.Info.SourceString()) {
+
+			go func() {
+				if err := forwardToWebhook(event); err != nil {
+					logrus.Error("Failed forward to webhook", err)
+				}
+			}()
+		}
 		eventsWebhook.OnMessage(event)
 		// metaParts := []string{fmt.Sprintf("pushname: %s", event.Info.PushName), fmt.Sprintf("timestamp: %s", event.Info.Timestamp)}
 		// if event.Info.Type != "" {

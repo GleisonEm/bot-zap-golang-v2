@@ -127,6 +127,7 @@ func runRest(_ *cobra.Command, _ []string) {
 	rest.InitRestUser(app, userService)
 	rest.InitRestMessage(app, messageService)
 	rest.InitRestGroup(app, groupService)
+	rest.InitRestMaster(app)
 
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.Render("views/index", fiber.Map{

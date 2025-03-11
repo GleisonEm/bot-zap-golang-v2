@@ -22,7 +22,7 @@ type ExtractedMedia struct {
 
 func OnMessage(evt *events.Message) {
 	fmt.Println("RawMessage", evt.RawMessage)
-
+	return
 	messageText := ""
 	if evt.Message.GetExtendedTextMessage().GetText() != "" {
 		messageText = evt.Message.GetExtendedTextMessage().GetText()
@@ -174,13 +174,13 @@ func OnMessage(evt *events.Message) {
 
 		}
 	} else {
-		audioMessage := evt.Message.GetAudioMessage()
-		// fmt.Println("audio message direto", audioMessage)
-		if audioMessage != nil {
-			go ServiceAppContext.Context.MessageService.ConvertMessageAudioToText(context.Background(), fromChat, sender, argument, stanzaID, messageText, domainBotTypes.SendMessageParams{
-				AudioMessage: audioMessage,
-			})
-		}
+		// audioMessage := evt.Message.GetAudioMessage()
+		// // fmt.Println("audio message direto", audioMessage)
+		// if audioMessage != nil {
+		// 	go ServiceAppContext.Context.MessageService.ConvertMessageAudioToText(context.Background(), fromChat, sender, argument, stanzaID, messageText, domainBotTypes.SendMessageParams{
+		// 		AudioMessage: audioMessage,
+		// 	})
+		// }
 	}
 
 	// if command == "@supremacy" {

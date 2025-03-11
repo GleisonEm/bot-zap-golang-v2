@@ -16,6 +16,7 @@ import (
 	eventsWebhook "github.com/gleisonem/bot-zap-golang-v2/events"
 	"github.com/gleisonem/bot-zap-golang-v2/internal/websocket"
 	pkgError "github.com/gleisonem/bot-zap-golang-v2/pkg/error"
+	"github.com/gleisonem/bot-zap-golang-v2/pkg/utils"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	"go.mau.fi/whatsmeow"
@@ -367,6 +368,7 @@ func forwardToWebhook(evt *events.Message, webhook string) error {
 		"info":             evt.Info,
 		"message_complete": evt.RawMessage,
 		"audio":            audioMedia,
+		"audio_converted":  audioMedia,
 		"contact":          evt.Message.GetContactMessage(),
 		"document":         documentMedia,
 		"forwarded":        forwarded,
@@ -413,7 +415,27 @@ func forwardToWebhook(evt *events.Message, webhook string) error {
 			return pkgError.WebhookError(fmt.Sprintf("Failed to download audio: %v", err))
 		}
 		body["audio"] = path
+
+		pathExtract, err := ExtractMedia(config.PathMedia, audioMedia)
+		if err != nil {
+			log.Errorf("Failed to download audio extract webhook: %v", err)
+			// s, err2 := service.WaCli.SendMessage(
+			// 	context.Background(), dataWaRecipient, service.WaCli.BuildReaction(dataWaRecipient, dataWaRecipientSender, stanzaID, "❌"),
+			// )
+			// fmt.Println("mandado react", s, err2)
+		} else {
+			log.Infof("audio downloaded to %s webhook", pathExtract)
+			filePathAudio := fmt.Sprintf("%s/%d-%s%s", config.PathStorages, time.Now().Unix(), uuid.NewString(), ".wav")
+			errConvertOgaToWav := utils.ConvertOgaToWav(path.MediaPath, filePathAudio)
+
+			if errConvertOgaToWav != nil {
+				log.Errorf("Failed to convert oga to wav in webhook: %v", errConvertOgaToWav)
+			} else {
+				body["audio_converted"] = filePathAudio
+			}
+		}
 	}
+
 	if documentMedia != nil {
 		path, err := ExtractMedia(config.PathMedia, documentMedia)
 		if err != nil {

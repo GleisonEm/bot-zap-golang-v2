@@ -6,7 +6,7 @@ import (
 
 var (
 	AppVersion             = "v4.17.0"
-	AppPort                = "3000"
+	AppPort                = "3002"
 	AppDebug               = false
 	AppOs                  = "AldinoKemal"
 	AppPlatform            = waCompanionReg.DeviceProps_PlatformType(1)
@@ -20,8 +20,8 @@ var (
 	DBName = "whatsapp.db"
 
 	WhatsappAutoReplyMessage    string
-	WhatsappWebhook             string = "https://gleisin1208.app.n8n.cloud/webhook-test/teste"
-	WhatsappWebhookSecundary    string = "https://gleisin1208.app.n8n.cloud/webhook/teste"
+	WhatsappWebhook             string = "https://n8n.gemanuel.site/webhook/81a0a43c-571e-44d9-b2f2-257c3b6a403a"
+	WhatsappWebhookSecundary    string = "https://n8n.gemanuel.site/webhook-test/81a0a43c-571e-44d9-b2f2-257c3b6a403a"
 	WhatsappLogLevel                   = "ERROR"
 	WhatsappSettingMaxFileSize  int64  = 50000000  // 50MB
 	WhatsappSettingMaxVideoSize int64  = 100000000 // 100MB

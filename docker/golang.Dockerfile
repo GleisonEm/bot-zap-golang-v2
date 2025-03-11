@@ -20,4 +20,7 @@ WORKDIR /app
 # Copy compiled from builder.
 COPY --from=builder /app/whatsapp /app/whatsapp
 # Run the binary.
+
+EXPOSE 3002
+
 ENTRYPOINT ["/app/whatsapp"]

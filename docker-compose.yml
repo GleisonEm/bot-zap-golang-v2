@@ -11,12 +11,15 @@ services:
       context: .
       dockerfile: ./docker/golang.Dockerfile
     restart: 'always'
+    env_file:
+      - .env
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=Host(`${DOMAIN_HOST}`)" # Adapte para seu domínio
-      - "traefik.http.routers.api.entrypoints=websecure" # Use HTTPS (websecure)
-      - "traefik.http.routers.api.tls.certresolver=myresolver" # Config. do certificado
-      - "traefik.http.services.api.loadbalancer.server.port=3002"
+      - "traefik.http.routers.api-wpp-golang.rule=Host(`${DOMAIN_HOST}`)"
+      - "traefik.http.routers.api-wpp-golang.entrypoints=websecure"  # Use HTTPS (websecure)
+      - "traefik.http.routers.api-wpp-golang.tls.certresolver=myresolver"  # Config. do certificado
+      - "traefik.http.services.api-wpp-golang.loadbalancer.server.port=3002"
+      - traefik.http.routers.api-wpp-golang.middlewares=myauth
 
     networks:
       - proxy

@@ -25,7 +25,9 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/filesystem"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/template/html/v2"
+	"github.com/joho/godotenv"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -54,6 +56,12 @@ func init() {
 }
 
 func runRest(_ *cobra.Command, _ []string) {
+
+	errEnv := godotenv.Load()
+	if errEnv != nil {
+		logrus.Info("Erro ao carregar o arquivo .env")
+	}
+
 	if config.AppDebug {
 		config.WhatsappLogLevel = "DEBUG"
 	}

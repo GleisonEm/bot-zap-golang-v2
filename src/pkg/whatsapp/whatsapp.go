@@ -371,6 +371,7 @@ func forwardToWebhook(evt *events.Message, webhook string) error {
 		"audio_converted":  audioMedia,
 		"contact":          evt.Message.GetContactMessage(),
 		"cellphone":        evt.Info.Sender.User,
+		"sender":           evt.Info.Sender,
 		"document":         documentMedia,
 		"forwarded":        forwarded,
 		"from_id":          dataWaRecipient,
